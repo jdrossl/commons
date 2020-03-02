@@ -13,29 +13,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.stores.impl;
+package org.craftercms.commons.file.blob.impl;
 
-import org.craftercms.commons.file.stores.RemotePath;
-import org.springframework.beans.factory.annotation.Required;
-
-import java.util.regex.Matcher;
+import org.craftercms.commons.file.blob.EnvironmentResolver;
 
 /**
- * {@link RemotePathParser} that uses a fixed store type and the complete path string to build the
- * {@link RemotePath}.
- *
- * @author avasquez
+ * @author joseross
  */
-public class FixedStoreTypeRemotePathParser implements RemotePathParser {
-    private String storeType;
+public class FixedEnvironmentResolver implements EnvironmentResolver {
 
-    @Required
-    public void setStoreType(String storeType) {
-        this.storeType = storeType;
+    protected String environment;
+
+    public FixedEnvironmentResolver(String environment) {
+        this.environment = environment;
     }
 
     @Override
-    public RemotePath parse(String pathStr, Matcher matcher) {
-        return new RemotePath(storeType, pathStr);
+    public String getEnvironment() {
+        return environment;
     }
+
 }

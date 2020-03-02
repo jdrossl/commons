@@ -13,29 +13,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.stores.impl;
+package org.craftercms.commons.file.blob.impl;
 
-import org.craftercms.commons.file.stores.RemotePath;
-import org.springframework.beans.factory.annotation.Required;
-
-import java.util.regex.Matcher;
+import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.file.blob.BlobUrlResolver;
 
 /**
- * {@link RemotePathParser} that uses a fixed store type and the complete path string to build the
- * {@link RemotePath}.
- *
- * @author avasquez
+ * @author joseross
  */
-public class FixedStoreTypeRemotePathParser implements RemotePathParser {
-    private String storeType;
+public class BlobUrlResolverImpl implements BlobUrlResolver {
 
-    @Required
-    public void setStoreType(String storeType) {
-        this.storeType = storeType;
+    protected String fileExtension;
+
+    public BlobUrlResolverImpl(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
     @Override
-    public RemotePath parse(String pathStr, Matcher matcher) {
-        return new RemotePath(storeType, pathStr);
+    public String getBlobUrl(String contentUrl) {
+        return StringUtils.appendIfMissing(contentUrl, "." + fileExtension);
     }
+
+    @Override
+    public String getContentUrl(String blobUrl) {
+        return StringUtils.removeEnd(blobUrl, "." + fileExtension);
+    }
+
 }
